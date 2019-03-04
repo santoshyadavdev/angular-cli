@@ -33,6 +33,9 @@ const ruleMapping: {[key: string]: string} = {
   'no-template-call-expression': 'template-no-call-expression',
   'templates-no-negated-async': 'template-no-negated-async',
   'trackBy-function': 'template-use-track-by-function',
+  'no-attribute-parameter-decorator': 'no-attribute-decorator',
+  'component-change-detection': 'prefer-on-push-component-change-detection',
+  'max-inline-declarations': 'component-max-inline-declarations'
 };
 
 function updateTsLintConfig(): Rule {
