@@ -6,9 +6,7 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import { BudgetEntry, BudgetType, ThresholdSeverity, checkBudgets } from './bundle-calculator';
-
-const kB = 1000;
+import { BudgetEntry, BudgetType, ThresholdSeverity, checkBudgets, kB } from './bundle-calculator';
 
 describe('bundle-calculator', () => {
   describe('checkBudgets()', () => {
@@ -337,6 +335,39 @@ describe('bundle-calculator', () => {
         label: 'foo.ext',
         message: jasmine.stringMatching('foo.ext exceeded maximum budget.'),
       });
+    });
+
+    it('yields exceeded individual file budget - 29040', () => {
+      const budgets: BudgetEntry[] = [
+        {
+          type: BudgetType.bundle,
+          maximumError: '1000kb',
+        },
+      ];
+      const stats = {
+        chunks: [
+          {
+            id: 0,
+            initial: true,
+            names: ['main'],
+            files: ['main.ext', 'bar.ext'],
+          },
+        ],
+        assets: [
+          {
+            name: 'main.ext',
+            size: 1 * kB,
+          },
+          {
+            name: 'bar.ext',
+            size: 0.5 * kB,
+          },
+        ],
+      };
+
+      const failures = Array.from(checkBudgets(budgets, stats));
+
+      expect(failures.length).toBe(0);
     });
   });
 });
